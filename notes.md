@@ -44,7 +44,26 @@ Go doest not have pointer arithmetic
 it does not have manual memory allocation 
 we can use the new () for allocating memory to any variable 
 
+# structs 
 
+Structs are used to create  a custom data type by cobining multiple fields of same and different types 
 
+we can copy the instance of the struct in two ways one is the direct way , in this the coped instance is different means if we change anything then it will not chnage in the original instance , and there is a referce way in which we copy the struct instance using reference and by this way if we change anything using the copied instance then we the original instance is also changed 
 
+# methods
+
+A method is a function with a special receiver argument.
+
+The receiver appears in its own argument list between the func keyword and the method name.
+
+Go already has functions, but methods allow us to attach behavior directly to structs. This gives encapsulation, makes code feel more object-oriented, enables structs to satisfy interfaces, and provides cleaner syntax like p.Greet() instead of Greet(p).
+
+# Interface 
+
+An interface in Go is a type that specifies a set of method signatures (a contract).
+If a type (struct or custom type) has all the methods required by the interface, then it automatically implements that interface — no implements or extends keyword is needed.
+
+They enable polymorphism in Go.
+
+There are diffferent types of buit in interface like Stringer and error
 
