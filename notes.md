@@ -65,5 +65,5 @@ If a type (struct or custom type) has all the methods required by the interface,
 
 They enable polymorphism in Go.
 
-There are diffferent types of buit in interface like Stringer and error
+There are diffferent types of buit in interface like Stringer and error 
 
