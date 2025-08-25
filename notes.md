@@ -67,3 +67,41 @@ They enable polymorphism in Go.
 
 There are diffferent types of buit in interface like Stringer and error 
 
+# concorruency in Go 
+
+It looks like the different processes are running concorruently , but actually they are runnig by a single processing unit and by context switching and the operation becomes so fast that it looks like they are running concurrently 
+
+# Go Routine
+
+It is one of the method for executing the concurreny in go lang 
+
+Every process which run concurrently in golang i called goroutine 
+it is  light weighted thread 
+creation cost of go routine is smaller than thread 
+every program has atleast one go routine named as main function 
+when main is terminated then all the go rutines will be terminated 
+
+we will be using time .Sleep for giving time to the goroutine to start executing 
+
+go routines use the staack for the excution , but we can increase or decrease the memory used by the go routine , but in case of thread we cannot do it 
+
+# Channels 
+
+channel is a communication pipeline that allows multiple goroutines to safely send and receive data from each other
+
+when there is  dependency of  one go routine in other then we need to use channels so that they can communicate 
+
+
+Imagine two people, Goroutine A and Goroutine B, who need to pass a message to each other. They don't have a shared desk, so they use a special mailbox.
+
+Sending: Goroutine A writes a message and puts it in the mailbox.
+
+Receiving: Goroutine B opens the mailbox and takes the message out.
+
+The channel is this mailbox. It ensures that the message is received by only one goroutine and that the data transfer is safe.
+
+in case of unbuffered channels that we create normally ,  if the receiver is not set , means the chanel is not used by any of the go routine than the main function blocks the code at that point of time and the compiler then gets to know that there is only one go routine and it is also blocked  therefor it enters inside the deadlock condition 
+
+
+
+
