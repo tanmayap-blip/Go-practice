@@ -102,6 +102,136 @@ The channel is this mailbox. It ensures that the message is received by only one
 
 in case of unbuffered channels that we create normally ,  if the receiver is not set , means the chanel is not used by any of the go routine than the main function blocks the code at that point of time and the compiler then gets to know that there is only one go routine and it is also blocked  therefor it enters inside the deadlock condition 
 
+in case of unbuffered channels ,  both the sender and receiver should be present when we use the channels , else there will be a deadlock condition 
+
+ok status is used to check the check if the channel is closed or not 
+
+buffered channel - to make the channel buffered we need to set the size of the channel to some fixed value 
+
+
+There are two types of channel , When using channels as function parameters, you can specify if a channel is meant to only send or receive values. This specificity increases the type-safety of the program.
+
+1) Bidirectional channel - when the channel is not specified anything means it can both send and receive data 
+ ex- func sending(ch chan string){}
+2) Unidirectional Channel - when the channel is mentioned with either send only or receive only as its type , send only is intialized as ch chan<- string, and the receive only is intialized as ch <-chan string
+   ex- func sending(ch chan<- string){}  means you can only update the channel with the data 
+3) ex- func receiving(ch <-chan string){} means you can only read from the channel not possible to send anything 
+
+
+# Channel Synchronization 
+
+When one goroutine needs to pass something to another, they both must be "present" for the exchange to happen. If the sender gets there first, it waits for the receiver. If the receiver gets there first, it waits for the sender. This waiting and signaling is what channel synchronization is all about. It guarantees that certain operations happen in a predictable order, preventing chaos and ensuring your program works correctly.
+
+Channel synchronization relies on the blocking behavior of channels.
+
+Blocking on Send: A goroutine sending a value to an unbuffered channel will block (pause) until another goroutine is ready to receive that value. This is a synchronization point.
+
+Blocking on Receive: A goroutine receiving a value from an empty channel will block until a value is sent to it. This is another synchronization point.
+
+
+in case of only one go routine need to be waited we can do that using the time.Sleep 
+but when we need to wait for multiple go routines to finish we can use wait Group 
+
+there are three function in wait group add for assigfning number of go routines , wait for making the code wait until all the go routines are not completed , done for marking one go routine completed , we basically create a variable for wait group with sync.waitgroup, then we mark the number of gr then we pass the refernce of wait group for the done in the go routine using defer , then at the end of the code we will do the wait 
+ 
+
+# Select 
+
+Select statement is basically used for waiting on multiple channel operations at once .It chooses which channel operation to run based on which one is ready first.
+
+A select statement contains a set of case clauses and an optional default clause.
+
+case Clause: Each case corresponds to a channel operation (either sending or receiving). The select statement evaluates all of these cases.
+
+Ready Channels: The select statement will choose a case whose channel is ready to proceed.
+
+For a receive operation (<-ch), the channel is ready if it has a value in its buffer or a sender is available.
+
+For a send operation (ch <- value), the channel is ready if it has space in its buffer or a receiver is available.
+
+No Ready Channels: If none of the channels are ready, the select statement blocks until one of them becomes ready.
+
+The default Clause: The default clause is optional. If it's present, and no other case is ready, the select statement will execute the default block immediately without blocking.
+
+
+-> Non blocking channels
+
+In Go, all channel operations are blocking by default. However, you can achieve non-blocking channel operations by using a select statement with a default clause.
+
+How It Works
+The select statement with a default clause gives you a way to check a channel's status without getting stuck.
+
+Blocking Operation: If you try to send to or receive from a channel, and it isn't immediately ready (e.g., the channel is empty or full), your goroutine will pause and wait. This is a blocking operation.
+
+Non-Blocking Operation: By adding a default clause to a select statement, you tell the program: "If the channel isn't ready right now, don't wait. Just run this other code instead." This allows your program to keep moving without being halted.
+
+This is extremely useful when you want to avoid deadlocks or to periodically check for new data without dedicating a goroutine to wait indefinitely.
+
+
+-> timeouts - there is a feature of timeouts , in this we can assign a timeout in the select statements , such  that if none of the case is ready till the timeout the timeout case will be used 
+
+``` select {
+case res := <-c1:
+fmt.Println(res)
+case <-time.After(1 * time.Second):
+fmt.Println("timeout 1")
+} 
+```
+
+
+# Worker Pool
+
+A worker pool is a design pattern in concurrent programming that involves a fixed number of goroutines (workers) that are created once and then continuously wait for and process tasks from a shared queue (a channel).
+
+A worker pool is a design pattern in concurrent programming used to manage a fixed number of goroutines (workers) to execute a large number of tasks. Instead of creating a new goroutine for every single task, you create a limited pool of workers that sit and wait for work to be assigned to them
+
+A typical worker pool in Go consists of three main parts:
+
+A Jobs Channel: This is a channel that acts as a queue. Producers (the main goroutine or other parts of the program) send tasks to this channel.
+
+Worker Goroutines: These are the goroutines that make up the pool. They are launched at the start and continuously read from the jobs channel, process the tasks, and then wait for the next one.
+
+A Results Channel: (Optional but common) This is another channel where workers can send their results back to a collector.
+
+# Atomic Counter 
+
+An atomic counter is a special type of counter that is guaranteed to be updated safely in a concurrent environment. It's used to increment or decrement a number without any chance of a race condition.In simple terms, an "atomic" operation is an action that happens as a single, indivisible unit. It either completes entirely or doesn't happen at all. No other goroutine can interrupt it.
+
+
+
+The Problem: Race Conditions
+Without atomic operations, a simple counter in a concurrent program can lead to unpredictable results. This is because a standard increment operation (counter++) is not atomic; it's actually three separate steps:
+
+Read the current value of the counter.
+
+Add 1 to that value.
+
+Write the new value back to the counter.
+
+
+
+# mutex 
+
+A mutex (short for mutual exclusion) is a synchronization primitive used to protect shared data from being accessed by multiple goroutines at the same time. It acts like a lock that ensures only one goroutine can access a critical section of code at any given moment.
+
+How Mutexes Work
+A mutex provides two primary methods:
+
+Lock(): This method acquires the lock. If the lock is already held by another goroutine, the current goroutine will block (pause) until the lock is available.
+
+Unlock(): This method releases the lock, allowing other waiting goroutines to acquire it.
+
+By placing Lock() and Unlock() calls around a shared resource, you create a "critical section" of code that is guaranteed to be executed by only one goroutine at a time.
+
+
+
+
+
+
+
+Read about single flight, why we use , advantages and disadvantages 
+
+visualize panics , and make sure it should not be shown on server , basically handle panics 
 
 
 
