@@ -225,6 +225,48 @@ By placing Lock() and Unlock() calls around a shared resource, you create a "cri
 
 
 
+# Panics 
+
+A panic in Go is a special type of error that stops the normal execution of a program. It's an unrecoverable runtime error, typically used for situations where a program cannot continue safely, such as an out-of-bounds array access, a nil pointer dereference, or a division-by-zero error. When a function panics, it immediately stops executing, and the Go runtime begins to unwind the call stack, running any deferred functions along the way before terminating the program and printing a stack trace.
+
+recover is a function which is used to catch panics , there fore it is needed to be passed as the defer , in the recover it will return the value passed in panic 
+
+
+# Unit Testing 
+There are different kind of testing : - unit , integration, acceptance and etc ,
+Unit means a small peice of code often refferd to a functions 
+unit testing means testing each piece of code in isolation , independent of other codes 
+
+benefits of unit testing :-
+1) isolation 
+2) improved code quality 
+3) code coverage 
+4) regression detection - by mistake changes detection 
+5) refactoring and maintainance
+
+ -> Mocking
+
+ Mocking in unit testing is the process of creating a fake, stand-in version of an external service or a complex dependency that your code relies on.
+
+Instead of your code talking to a real database, a remote API, or a file system during a test, it talks to a mock object that you create. The mock object behaves exactly as you tell it to—it can pretend to return specific data, simulate an error, or just record that a certain function was called.
+
+
+# Modules 
+
+Modules is a collection of packages stored in a file tree with a go.mod file at its root
+
+# Http 
+
+-> Status Code 
+Info - 100-199
+Success- 200- 299
+Redirection - 300-399
+Client Error- 400-499
+Server Error- 500- 599
+
+
+ServeMux is Gos built in request router , which handles the request calls implicitly 
+
 
 
 
@@ -232,6 +274,25 @@ By placing Lock() and Unlock() calls around a shared resource, you create a "cri
 Read about single flight, why we use , advantages and disadvantages 
 
 visualize panics , and make sure it should not be shown on server , basically handle panics 
+
+
+gin :- 
+
+normal server
+midllware
+conversation between middleware
+api creation 
+
+
+gorm :-
+sql download
+migration 
+use gorm foe all of this 
+goose
+
+testing 
+
+suite
 
 
 

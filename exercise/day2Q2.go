@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-	//rand.Seed(time.Now().UnixNano())
 	n := 200
 	var wg sync.WaitGroup
 	ch := make(chan int, n)
